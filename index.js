@@ -10,9 +10,9 @@ fastify.post('/upload', async (req, res) => {
     // Process the files as needed
     // ...
 
-    fs.writeFile(path.join(__dirname, 'uploads', req.body.file.filename), await req.body.file.toBuffer(), (err, data) => {
+    fs.writeFile(path.join(__dirname, 'static/uploads', req.body.file.filename), await req.body.file.toBuffer(), (err, data) => {
         if(err) return res.code(500).send('error')
-        else return res.send(req.body.file.filename + ' uploaded.')
+        else return 
     });
 
 
@@ -22,11 +22,14 @@ fastify.post('/upload', async (req, res) => {
 fastify.register(require('@fastify/static'), { root: path.join(__dirname, 'static') });
 
 fastify.get('/uploads/:id', (req, res) => {
-    fs.access(`uploads/${req.params.id}`, err => {
+    fs.access(path.join(__dirname, 'static/uploads', req.params.id), err => {
+        if(err) console.error(err)
         if(err) return res.code(404).send('no file found')
+        
         else{
             res.header('Content-Disposition', 'attachment; filename=' + req.params.id);
-            res.sendFile('uploads/' + req.params.id)
+            return res.sendFile('uploads/' + req.params.id);
+            
         }
     })
 })
