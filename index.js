@@ -4,7 +4,7 @@ const path = require('path')
 const fs = require('fs')
 fastify.register(fastifyMultipart, { attachFieldsToBody: true, limits: 9999999 })
 
-fastify.post('/upload', async (req, reply) => {
+fastify.post('/upload', async (req, res) => {
     // Access uploaded files using field names
     const file = await req.body.file.toBuffer()
     // Process the files as needed
